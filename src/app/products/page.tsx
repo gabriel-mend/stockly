@@ -6,6 +6,14 @@ import { getProducts } from "../_data-access/product/get-products";
 
 export default async function ProductsPage() {
   const products = await getProducts()
+  // await fetch('http://localhost:3000/api/products', {
+  //   method: 'POST',
+  //   body: JSON.stringify({
+  //     name: 'Teste',
+  //     price: 10,
+  //     stock: 10,
+  //   })
+  // })
   return (
     <div className="w-full space-y-8 p-8 bg-white mx-8 my-8 rounded-lg">
       <div className="flex w-full items-center justify-between">

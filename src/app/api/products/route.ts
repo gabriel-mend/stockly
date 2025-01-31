@@ -7,7 +7,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const body = await request.body as Product | null
+  const body = await request.json() as Product | null
   const { name, price, stock } = body as Product
   await db.product.create({
     data: { name, price, stock },
