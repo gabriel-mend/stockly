@@ -9,6 +9,9 @@ import { getProducts } from "../_data-access/product/get-products";
 
 // export const dynamic = "force-dynamic"
 
+// colocando intervalo para buscar de dados em uma pagina estatica
+export const revalidate = 10
+
 export default async function ProductsPage() {
   // sempre que uma pagina utilizar headers, params ou data caching a pagina se torna em uma pagina dinamica
   const products = await getProducts()
