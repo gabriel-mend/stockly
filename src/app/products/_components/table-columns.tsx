@@ -29,8 +29,9 @@ export const productTableColumns: ColumnDef<Product>[] = [
     accessorKey: "status",
     header: "Status",
     cell: (row) => {
-      const product = row.row.original
-      const label = getStatusLabel(product.status)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const product = row.row.original as any
+      const label = getStatusLabel(product?.status)
       return <Badge variant={label === 'Em estoque' ? 'default' : 'outline'} className="gap-5">
           <CircleIcon 
             size={14}
