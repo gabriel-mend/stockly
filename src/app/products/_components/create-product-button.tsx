@@ -20,29 +20,23 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { Plus } from "lucide-react";
+import { Loader2Icon, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-import { z } from "zod";
-
 import { NumericFormat } from "react-number-format";
+import {
+  createProductSchema,
+  CreateProductSchemaType,
+} from "@/app/_actions/product/create-product/schema";
 
-const formSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório").trim(),
-  price: z.number().min(0.01, "Preço deve ser maior que zero"),
-  stock: z.coerce
-    .number()
-    .positive({ message: "Estoque deve ser positiva" })
-    .int()
-    .min(0, "Estoque não pode ser negativo"),
-});
+import { useState } from "react";
+import { createProduct } from "@/app/_actions/product/create-product";
 
-type FormSchemaType = z.infer<typeof formSchema>;
-
-export const AddProductButton = () => {
-  const form = useForm<FormSchemaType>({
+export const CreateProductButton = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const form = useForm<CreateProductSchemaType>({
     shouldUnregister: true,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: "",
       price: 0,
@@ -50,12 +44,17 @@ export const AddProductButton = () => {
     },
   });
 
-  const onSubmit = (data: FormSchemaType) => {
-    console.log("Form submitted with data:", data);
+  const onSubmit = async (data: CreateProductSchemaType) => {
+    try {
+      await createProduct(data);
+      setDialogOpen(false);
+    } catch (error) {
+      console.error("Erro ao criar produto:", error);
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Plus size={20} />
@@ -134,7 +133,16 @@ export const AddProductButton = () => {
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">Criar produto</Button>
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="gap-2"
+              >
+                {form.formState.isSubmitting && (
+                  <Loader2Icon className="animate-spin" size={18} />
+                )}
+                Criar produto
+              </Button>
             </DialogFooter>
           </form>
         </Form>
