@@ -1,7 +1,7 @@
 "use server";
 // uma server action e uma funcao que e transormada em uma rota http
 import { db } from "@/lib/prisma";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { createProductSchema, CreateProductSchemaType } from "./schema";
 
 export const createProduct = async (data: CreateProductSchemaType) => {

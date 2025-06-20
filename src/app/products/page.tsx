@@ -1,9 +1,6 @@
 import { DataTable } from "../_components/ui/data-table";
 import { productTableColumns } from "./_components/table-columns";
-import {
-  cachedGetProducts,
-  getProducts,
-} from "../_data-access/product/get-products";
+import { cachedGetProducts } from "../_data-access/product/get-products";
 import { CreateProductButton } from "./_components/create-product-button";
 
 // O Next.js utiliza o "force-dynamic" para renderizar paginas com headers, params ou data caching,
@@ -12,7 +9,7 @@ import { CreateProductButton } from "./_components/create-product-button";
 // export const dynamic = "force-dynamic"
 
 // colocando intervalo para buscar de dados em uma pagina estatica
-export const revalidate = 10;
+// export const revalidate = 10;
 
 export default async function ProductsPage() {
   // sempre que uma pagina utilizar headers, params ou data caching a pagina se torna em uma pagina dinamica
