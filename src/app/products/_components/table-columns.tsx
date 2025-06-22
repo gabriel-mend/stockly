@@ -27,6 +27,7 @@ import { DeleteProductDialogContent } from "./delete-dialog-content";
 import { Dialog, DialogTrigger } from "@/app/_components/ui/dialog";
 import { UpsertProductDialogContent } from "./upsert-dialog-content";
 import { useState } from "react";
+import { NumericFormat } from "react-number-format";
 
 const getStatusLabel = (status: string) => {
   if (status === "IN_STOCK") {
@@ -43,6 +44,14 @@ export const productTableColumns: ColumnDef<Product>[] = [
   {
     accessorKey: "price",
     header: "Valor unitário",
+    cell: (row) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const product = row.row.original as any;
+      return Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(Number(product?.price));
+    },
   },
   {
     accessorKey: "stock",
