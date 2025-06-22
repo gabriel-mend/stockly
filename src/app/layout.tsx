@@ -1,10 +1,10 @@
 import Sidebar from "./_components/Sidebar";
+import { Toaster } from "./_components/ui/sonner";
 import "./globals.css";
 
-import { Inter } from 'next/font/google'
+import { Inter } from "next/font/google";
 
-
-const inter = Inter({ subsets: ['latin'], display: 'auto' })
+const inter = Inter({ subsets: ["latin"], display: "auto" });
 
 export default function RootLayout({
   children,
@@ -17,6 +17,7 @@ export default function RootLayout({
         <div className="flex h-full">
           <Sidebar />
           {children}
+          <Toaster />
         </div>
       </body>
     </html>
