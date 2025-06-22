@@ -1,10 +1,10 @@
 "use client";
 
-import { createProduct } from "@/app/_actions/product/create-product";
+import { upsertProduct } from "@/app/_actions/product/upsert-product";
 import {
-  createProductSchema,
-  CreateProductSchemaType,
-} from "@/app/_actions/product/create-product/schema";
+  UpsertProductSchemaType,
+  upsertProductSchema,
+} from "@/app/_actions/product/upsert-product/schema";
 import { Button } from "@/app/_components/ui/button";
 import {
   DialogClose,
@@ -29,26 +29,31 @@ import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 
 interface UpsertProductDialogContentProps {
-  onSuccess: () => void;
+  defaultValues?: UpsertProductSchemaType;
+  onSuccess?: () => void;
 }
 
 export function UpsertProductDialogContent({
   onSuccess,
+  defaultValues,
 }: UpsertProductDialogContentProps) {
-  const form = useForm<CreateProductSchemaType>({
+  const form = useForm<UpsertProductSchemaType>({
     shouldUnregister: true,
-    resolver: zodResolver(createProductSchema),
-    defaultValues: {
+    resolver: zodResolver(upsertProductSchema),
+    defaultValues: defaultValues ?? {
       name: "",
       price: 0,
       stock: 1,
     },
   });
 
-  const onSubmit = async (data: CreateProductSchemaType) => {
+  const isEditing = !!defaultValues;
+
+  const onSubmit = async (data: UpsertProductSchemaType) => {
     try {
-      await createProduct(data);
-      onSuccess();
+      console.log("Dados do produto:", data);
+      await upsertProduct({ ...data, id: defaultValues?.id });
+      onSuccess?.();
     } catch (error) {
       console.error("Erro ao criar produto:", error);
     }
@@ -58,7 +63,7 @@ export function UpsertProductDialogContent({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <DialogHeader>
-            <DialogTitle>Criar produto</DialogTitle>
+            <DialogTitle>{isEditing ? "Editar" : "Criar"} produto</DialogTitle>
             <DialogDescription>Insira as informacoes abaixo</DialogDescription>
           </DialogHeader>
           <FormField
